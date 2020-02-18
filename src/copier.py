@@ -6,13 +6,13 @@ client = discord.Client()
 
 @client.event
 async def on_message(message):
-    me = client.get_user(127915903483510784) # dad's ID
+    me = client.get_user(92708688606793728) # user ID
 
-    post_channel = client.get_channel(586242433445265419) # change this channel ID
-    get_channel = client.get_channel(510514823604207616) # original loli-time channel 
+    post_channel = client.get_channel(539867992847024151) # change this channel ID
+    get_channel = client.get_channel(540608326564839439) # original getter channel channel
 
-    if message.author != client.user and message.author == me and message.channel == client.get_channel(585940853902802956): # Change this channel id 
-        async for message in get_channel.history(limit=None, oldest_first=True): 
+    if message.author != client.user and message.author == me and message.channel == get_channel: # Change this channel id
+        async for message in get_channel.history(limit=None, oldest_first=True):
             if message.content != "":
               await post_channel.send( "[{0}]: {1}".format( message.author.name, message.content ))
               try:
