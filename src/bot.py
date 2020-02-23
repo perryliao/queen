@@ -1,23 +1,49 @@
 import discord
 import os
 import validation
+import io
+from discord.utils import get
 
 TOKEN = os.environ.get('QUEEN_TOKEN')
 client = discord.Client()
+report_id = 539867992847024151
 
-reporting = client.get_channel('534191629762822144')
-get_channel_id = '540608326564839439'
-arisa = client.get_server('539867992847024149')
+get_channel_id = 540608326564839439
 
 @client.event
 async def on_message(message):
-    me = await client.get_user_info('92708688606793728')
+    me = client.get_user(92708688606793728)
 
+    print_msg = ""
     if message.channel.id != get_channel_id:
-        print("[" + message.channel.name + "] " + message.author.name + ": " + message.content)
+        try:
+            print_msg = "[{0}::{1} - {2}]\n  {3}: {4}".format(message.channel.guild.name, message.channel.name, message.channel.id, message.author.name, message.content)
+        except:
+            print_msg = "[DM::{0} - {1}]\n  {2}: {3}".format(message.channel.recipient.name, message.channel.recipient.id, message.author.name, message.content)
+        print(print_msg)
 
-    if message.author != client.user and message.author == me and message.channel == get_channel_id: # and validation.validateMention(message.content):
-        await client.send_message(reporting, message.content)
+    global report_id
+    if message.content.startswith('!setchannel'):
+        report_id = int(message.content.replace('!setchannel', '').strip())
+    reporting = client.get_channel(report_id) if client.get_channel(report_id) != None else client.get_user(report_id)
+
+    if 'makitoshi best girl' in message.content.lower():
+        await message.channel.send(get(client.get_channel(get_channel_id).guild.emojis, name="HaruUvU"))
+
+    files = []
+    for attach in message.attachments:
+        f = io.BytesIO()
+        await attach.save(f)
+        files.append(discord.File(f, attach.filename))
+
+    if isinstance(message.channel, discord.DMChannel) and not message.author.bot:
+        await client.get_channel(get_channel_id).send(content=print_msg, files=files)
+
+    if message.author != client.user and message.author == me and message.channel.id == get_channel_id: # and validation.validateMention(message.content):
+        if message.content.startswith('!'):
+            await client.get_channel(get_channel_id).send("OK")
+        else:
+            await reporting.send(message.content, files=files)
     else:
         return
 
@@ -32,7 +58,6 @@ async def on_ready():
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
-    print('Server name: ' + arisa.name)
     print('------------')
 
 client.run(TOKEN)
