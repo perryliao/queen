@@ -35,17 +35,17 @@ async def on_message(message):
         if command[1] == 'avatar':
             if len(command) == 2:
                 # return sender's avatar
-                await message.channel.send(message.author.avatar)
+                await message.channel.send(message.author.avatar_url)
             elif len(message.mentions) > 0:
                 # print avatars of everyone mentioned
                 for member in message.mentions:
-                    await message.channel.send(member.avatar)
+                    await message.channel.send(member.avatar_url)
             else:
                 # find user based on the rest of the command
                 lookup_name = ' '.join(command[2:])
                 for member in message.guild.members:
                     if member.display_name.startswith(lookup_name):
-                        await message.channel.send(member.avatar)
+                        await message.channel.send(member.avatar_url)
                         return
                 await message.channel.send('No matches found')
 
