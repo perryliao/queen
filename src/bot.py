@@ -42,9 +42,9 @@ async def on_message(message):
                     await message.channel.send(member.avatar_url)
             else:
                 # find user based on the rest of the command
-                lookup_name = ' '.join(command[2:])
+                lookup_name = ' '.join(command[2:]).lower()
                 for member in message.guild.members:
-                    if member.display_name.startswith(lookup_name):
+                    if member.display_name.lower().startswith(lookup_name):
                         await message.channel.send(member.avatar_url)
                         return
                 await message.channel.send('No matches found')
