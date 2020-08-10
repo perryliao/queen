@@ -30,6 +30,26 @@ async def on_message(message):
     if 'makitoshi best girl' in message.content.lower():
         await message.channel.send(get(client.get_channel(get_channel_id).guild.emojis, name="HaruUvU"))
 
+    command = message.content.split()
+    if command[0] == '!m':
+        if command[1] == 'avatar':
+            if len(command) == 2:
+                # return sender's avatar
+                await message.channel.send(message.author.avatar)
+            elif len(message.mentions) > 0:
+                # print avatars of everyone mentioned
+                for member of message.mentions:
+                    await message.channel.send(member.avatar)
+            else:
+                # find user based on the rest of the command
+                lookup_name = ' '.join(command[2:])
+                for member of message.guild.members:
+                    if member.display_name.startswith(lookup_name):
+                        await message.channel.send(member.avatar)
+                        return
+                await message.channel.send('No matches found')
+
+
     files = []
     for attach in message.attachments:
         f = io.BytesIO()
