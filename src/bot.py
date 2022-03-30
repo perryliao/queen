@@ -12,7 +12,7 @@ get_channel_id = 540608326564839439
 
 @client.event
 async def on_message(message):
-    me = client.get_user(92708688606793728)
+    me = await client.fetch_user(92708688606793728)
 
     print_msg = ""
     if message.channel.id != get_channel_id:
